@@ -6,6 +6,9 @@ import http_service.HTTPService;
 import http_service.LinkGenerator;
 import model.open_weather.OpenWeatherCurrentWeatherModel;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 class WeatherRequest {
 
