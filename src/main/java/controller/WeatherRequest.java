@@ -4,15 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import http_service.HTTPService;
 import http_service.LinkGenerator;
-import model.open_weather.OpenWeatherCurrentWeatherModel;
+import model.open_weather.current.OpenWeatherCurrentWeatherModel;
+import model.open_weather.forecast.OpenWeatherForecastModel;
 
-import java.util.Arrays;
-import java.util.List;
+public class WeatherRequest {
 
-
-class WeatherRequest {
-
-    static OpenWeatherCurrentWeatherModel obtainCurrentWeatherFromApi(String cityName) {
+    // TODO: Static = bad?
+    static OpenWeatherCurrentWeatherModel obtainCityCurrentWeather(String cityName) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         String link = LinkGenerator.generateWeatherLinkByCity(cityName);
@@ -20,27 +18,41 @@ class WeatherRequest {
         HTTPService httpService = new HTTPService(link);
 
         String bufferData = httpService.bufferDataFromConnection();
-
-        return gson.fromJson(bufferData, OpenWeatherCurrentWeatherModel.class);
+        if (bufferData.equals("Connection has not been established.")) {
+            return null;
+        } else {
+            return gson.fromJson(bufferData, OpenWeatherCurrentWeatherModel.class);
+        }
     }
 
-    static OpenWeatherCurrentWeatherModel obtainCurrentWeatherFromApi() {
+    static OpenWeatherForecastModel obtainCityForecast(String cityName) {
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        // connect --- buffer data ---
+        String link = LinkGenerator.generateForecastLinkByCity(cityName);
 
-        // How do I get input?
-        //String link = LinkGenerator.generateWeatherLinkByCity("TALLINN");
-        String link = LinkGenerator.linkForTest();
-
-        // TODO: Create exception for wrong url and unsuccessful connection
         HTTPService httpService = new HTTPService(link);
 
-        // TODO: Some more exceptions
         String bufferData = httpService.bufferDataFromConnection();
-        //System.out.println(bufferData);
+        if (bufferData.equals("Connection has not been established.")) {
+            return null;
+        } else {
 
-        // TODO: Even more exceptions?
+            OpenWeatherForecastModel forecastModel = gson.fromJson(bufferData, OpenWeatherForecastModel.class);;
+            forecastModel.arrangeThreeDayForecast();
+            return forecastModel;
+        }
+    }
+
+    static OpenWeatherCurrentWeatherModel obtainCurrentWeatherFromApiSampleLink() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        String link = LinkGenerator.linkForTest();
+
+        HTTPService httpService = new HTTPService(link);
+
+        String bufferData = httpService.bufferDataFromConnection();
+
         OpenWeatherCurrentWeatherModel openWeatherCurrentWeather = gson.fromJson(bufferData, OpenWeatherCurrentWeatherModel.class);
         return openWeatherCurrentWeather;
     }

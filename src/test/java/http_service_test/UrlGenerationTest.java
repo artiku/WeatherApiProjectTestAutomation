@@ -16,7 +16,7 @@ public class UrlGenerationTest {
     @Test
     public void generateForecastLinkByCityTest() {
         String cityName = "Tallinn";
-        String link = LinkGenerator.generateWeatherLinkByCity(cityName);
+        String link = LinkGenerator.generateForecastLinkByCity(cityName);
         assertEquals("http://api.openweathermap.org/data/2.5/forecast?q=Tallinn&APPID=b23a28015112de497b276e514d2d04a0", link);
     }
 

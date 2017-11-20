@@ -21,28 +21,29 @@ public class HTTPService {
             if (this.connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 System.out.println("Connection established...");
             } else {
-                System.out.println("Something is wrong with the connection...");
+                System.err.println("Maybe city input was wrong?");
+                throw new IOException();
             }
         } catch (SocketTimeoutException e) {
-            e.printStackTrace();
+            System.err.println("Connection Timeout!");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Something is wrong with the connection...");
         }
     }
 
     public String bufferDataFromConnection() {
-        if (connection != null) {
-            try {
-                StringBuilder builder = new StringBuilder();
-                BufferedReader stream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                while (stream.ready()) {
-                    builder.append(stream.readLine());
-                }
-                System.out.println("Data obtained...");
-                return builder.toString();
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    StringBuilder builder = new StringBuilder();
+                    BufferedReader stream = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    while (stream.ready()) {
+                        builder.append(stream.readLine());
+                    }
+                    System.out.println("Data obtained...");
+                    return builder.toString();
             }
+        } catch (IOException e) {
+            System.err.println("Something is wrong with reading from the buffer...");
         }
         return "Connection has not been established.";
     }

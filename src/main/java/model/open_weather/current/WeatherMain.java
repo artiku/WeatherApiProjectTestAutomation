@@ -1,4 +1,4 @@
-package model.open_weather;
+package model.open_weather.current;
 
 public class WeatherMain {
 

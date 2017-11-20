@@ -1,9 +1,9 @@
-package model.open_weather;
+package model.open_weather.current;
 
 import com.google.gson.annotations.SerializedName;
 import model.APIModel;
 
-import java.util.HashMap;
+import static constants.Constants.KELVIN_TO_CELSIUS;
 
 public class OpenWeatherCurrentWeatherModel implements APIModel {
 
@@ -19,6 +19,10 @@ public class OpenWeatherCurrentWeatherModel implements APIModel {
         return this.main.getTemp();
     }
 
+    public double getTemperatureInCelsius() {
+        return this.main.getTemp() - KELVIN_TO_CELSIUS;
+    }
+
     public double getHumidity() {
         return this.main.getHumidity();
     }
@@ -27,14 +31,9 @@ public class OpenWeatherCurrentWeatherModel implements APIModel {
         return locationName;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
-    }
-
     @Override
     public String toString() {
-        return "Current Weather in " + this.getLocationName() + ":\n" +
-                "\tTemperature: " + this.getTemperature() + "\n" +
-                "\tHumidity: " + this.getHumidity();
+        return String.format("Current Weather in %s:\n\tTemperature: %.2f\n\tHumidity: %s",
+                this.getLocationName(), this.getTemperatureInCelsius(), this.getHumidity());
     }
 }
