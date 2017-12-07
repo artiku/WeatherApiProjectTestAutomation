@@ -12,13 +12,16 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// TODO: No file found exception. And test for it.
+
 public class FileService {
 
     public String[] readLinesFromInputFile(String filename) {
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
-            List<String> lines = new ArrayList<String>();
+            List<String> lines = new ArrayList<>();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
@@ -34,6 +37,7 @@ public class FileService {
     public void writeIntoFile(String cityName, OpenWeatherCurrentWeatherModel owModel, OpenWeatherForecastModel forecastModel) {
         try {
             PrintWriter writer = new PrintWriter("src/main/output/" + cityName + ".txt", "UTF-8");
+
             writer.println(owModel);
             writer.println(forecastModel);
             System.out.println(cityName + " weather war recorded");

@@ -12,7 +12,6 @@ class ForecastDay {
     private double tempMin;
 
     public ForecastDay(HashMap<String, Object> jsonDay) {
-
         LinkedTreeMap<String, Double> dayMain = (LinkedTreeMap<String, Double>) jsonDay.get("main");
         tempMax = dayMain.get("temp_max");
         tempMin = dayMain.get("temp_min");
